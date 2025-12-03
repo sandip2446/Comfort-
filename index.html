@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comfort Clean Laundromat: Done in 60 Minutes - Jalpachowk, KTM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* --- CUSTOM ANIMATIONS --- */
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* CTA Button Pulse */
+        @keyframes callPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(132, 204, 22, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(132, 204, 22, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(132, 204, 22, 0); }
+        }
+
+        @keyframes scroll-h {
+            0% { transform: translateX(0); } /* Start showing first copy immediately */
+            100% { transform: translateX(-50%); } /* Scroll exactly the width of one content set for a seamless loop */
+        }
+        @keyframes flashRed {
+            0%, 100% { color: #ef4444; } /* Red-500 */
+            50% { color: #fef2f2; } /* Fading to light color for sharp contrast */
+        }
+        @keyframes blinkText {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; } /* Subtle fade blink */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* NEW: Step Icon Animation - Subtle bounce/pulse */
+        @keyframes iconPulse {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+        
+        .animate-fade-up {
+            animation: fadeUp 0.8s ease-out both;
+        }
+        /* Applied to the main CTA button */
+        .animate-call-pulse {
+            animation: callPulse 2s infinite ease-in-out;
+        }
+        .ad-ticker-scroll {
+            display: inline-block; 
+            white-space: nowrap;
+            animation: scroll-h 45s linear infinite; /* Increased duration for slower speed */
+        }
+        .ad-segment {
+            display: inline-block;
+            padding-left: 3rem; 
+            padding-right: 3rem; 
+        }
+
+        .animate-flash-red {
+            animation: flashRed 0.5s infinite steps(1); 
+        }
+        .animate-blink-text {
+            animation: blinkText 2s infinite; 
+        }
+
+        /* --- WASHING PATTERN BACKGROUND --- */
+        @keyframes pan-background {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .washing-background {
+            background-color: #f0f8ff; /* Light blue base */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.4) 0%, transparent 80%),
+                radial-gradient(circle at 90% 80%, rgba(255,255,255,0.3) 0%, transparent 70%),
+                linear-gradient(135deg, rgba(200,230,255,0.3) 25%, transparent 25%),
+                linear-gradient(225deg, rgba(200,230,255,0.3) 25%, transparent 25%),
+                linear-gradient(45deg, rgba(200,230,255,0.3) 25%, transparent 25%),
+                linear-gradient(315deg, rgba(200,230,255,0.3) 25%, #f0f8ff 25%);
+            background-size: 80px 80px; /* Adjust size for subtlety */
+            animation: pan-background 60s linear infinite; /* Slow, continuous pan */
+            background-blend-mode: soft-light; /* Blends nicely with content */
+        }
+        
+
+        /* --- THEME STYLING --- */
+        .hero-background {
+            background-image: url('https://images.unsplash.com/photo-1543269865-cbf427fdce8e?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); 
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            background-color: #f7f7f7;
+        }
+        .hero-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95) 0%, rgba(249, 250, 251, 0.9) 100%);
+        }
+        .amenity-card {
+            @apply bg-white rounded-none shadow-lg p-6 flex flex-col items-center text-center transform transition duration-300 hover:shadow-2xl border-t-4 border-lime-500 hover:border-b-4 hover:border-lime-500;
+        }
+        .amenity-card i {
+            @apply text-5xl mb-4 text-lime-600 transition duration-300 transform group-hover:scale-110;
+        }
+        
+        /* New Step Styling */
+        .step-icon {
+            @apply text-7xl mb-4 p-4 rounded-full bg-lime-100 text-lime-600 border-4 border-lime-500;
+            animation: iconPulse 2s infinite ease-in-out;
+        }
+        .step-container:hover .step-icon {
+            animation: spin 1s linear infinite; /* Spin effect on hover */
+        }
+        
+        #map-placeholder {
+            height: 250px;
+            border-radius: 0; 
+            margin-top: 1.5rem;
+            color: #4b5563;
+            font-weight: 700;
+            border: 1px solid #9ca3af;
+            overflow: hidden;
+            text-shadow: none;
+        }
+        #map-placeholder iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .text-neon-green {
+            color: #84cc16; /* Tailwind Lime-500 */
+        }
+        .text-hot-red {
+            color: #ef4444; /* Tailwind Red-500 */
+        }
+        .bg-gradient-clean {
+            background: linear-gradient(90deg, #a7f3d0 0%, #dcfce7 100%); /* Light Green/Mint gradient */
+        }
+        .cta-flash {
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .cta-flash:hover {
+            transform: scale(1.05);
+        }
+
+        .benefit-block {
+             @apply p-8 bg-gray-50 rounded-none shadow-lg text-left border-b-4 border-lime-600 flex flex-col items-start transition duration-500 hover:bg-white;
+        }
+        .benefit-block h3 i {
+            @apply text-lime-600;
+        }
+
+        /* New loading spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #84cc16;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none; /* hidden by default */
+        }
+
+        /* Promotion Image and Loader Styles */
+        .promo-card-main {
+            /* Initially shows loading state */
+            background-color: #374151; /* Dark gray */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border: 4px solid #84cc16;
+            min-height: 350px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        /* Overlay for text visibility */
+        .promo-card-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); 
+            z-index: 1;
+        }
+        .promo-content {
+            position: relative;
+            z-index: 2;
+        }
+        .promo-loader {
+            position: relative;
+            z-index: 2;
+        }
+        
+    </style>
+    <script>
+        // --- MODAL & PRICE DISPLAY FUNCTIONS ---
+        
+        function closeModal() {
+            document.getElementById('offer-modal').classList.add('hidden');
+        }
+
+        function showOfferModal(event) {
+            event.preventDefault(); 
+            const modal = document.getElementById('offer-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+
+            const currentMonth = new Date().getMonth(); 
+            const standardPrice = 300;
+            
+            // Find the current active promotion object by checking the month
+            const currentPromo = NEPALI_FESTIVALS.find(promo => 
+                promo.month_index.includes(currentMonth)
+            ) || NEPALI_FESTIVALS[0]; 
+
+            modalTitle.textContent = currentPromo.title;
+
+            let offerDetailsHTML = `
+                <p class="text-xl font-extrabold text-lime-600 mb-4">${currentPromo.offer}</p>
+                <p class="text-lg text-gray-700">This promotion is valid for a limited time only at our Jalpachowk location. Offer may be conditional on service type (e.g., wash only, full load).</p>
+                <ul class="list-disc list-inside mt-4 text-gray-600 text-left space-y-2">
+            `;
+
+            // --- START MODAL PRICE DISPLAY LOGIC ---
+            if (currentPromo.name.includes("Holi")) {
+                const discountedPrice = standardPrice * 0.80; 
+                
+                // --- USER REQUEST FIX: Prominent Strikethrough Price ---
+                offerDetailsHTML += `
+                    <li class="mb-4">
+                        <div class="mt-2 p-3 border border-lime-500 bg-lime-50 rounded-lg text-center">
+                            <p class="text-lg font-medium text-gray-800">Your Holi Discount Price:</p>
+                            <p class="text-2xl font-bold mt-1">Was: <span class="line-through text-red-500 mr-3">NPR 300</span></p>
+                            <p class="text-5xl font-black text-lime-600 leading-none">NOW: NPR ${discountedPrice.toFixed(0)}</p>
+                        </div>
+                    </li>
+                `;
+                // End new price display
+                
+                offerDetailsHTML += `<li><span class="font-semibold">Standard Price (Non-Offer):</span> NPR 300 per load.</li>`;
+                offerDetailsHTML += `<li><span class="font-semibold">Condition:</span> Valid only for loads confirmed to be color-stained from Holi.</li>`;
+                
+                // Also trigger price change on the main screen 
+                showDiscountPricingInternal(currentPromo);
+
+            } else {
+                 offerDetailsHTML += `
+                    <li><span class="font-semibold">Standard Price (Non-Offer):</span> NPR 300 per load.</li>
+                    <li><span class="font-semibold">Condition:</span> See attendant for exact terms and discount calculation, as the current offer is conditional (e.g., requires multiple visits, applies only to specific items).</li>
+                `;
+            }
+            // --- END MODAL PRICE DISPLAY LOGIC ---
+
+
+            offerDetailsHTML += `
+                </ul>
+                <p class="text-sm mt-6 text-gray-500">Note: All promotional offers are subject to machine availability and staff discretion.</p>
+            `;
+
+            modalBody.innerHTML = offerDetailsHTML;
+            modal.classList.remove('hidden');
+        }
+
+        // --- SCROLL FUNCTION (Primary CTA) ---
+        function scrollToLocation(event) {
+            event.preventDefault(); 
+            const locationSection = document.getElementById('location');
+            const ctaButton = event.currentTarget;
+            ctaButton.classList.remove('animate-call-pulse');
+            if (locationSection) {
+                locationSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        // --- INTERNAL FUNCTION TO UPDATE PRICING BLOCK (Used by modal and on-page links) ---
+        function showDiscountPricingInternal(currentPromo) {
+            const standardPrice = 300;
+            let discountHTML = '';
+
+            if (currentPromo.name.includes("Holi")) {
+                // Calculation for Holi: 20% off the standard NPR 300 load price
+                const discountedPrice = standardPrice * 0.80; // 240 NPR
+                discountHTML = `
+                    <div class="mb-10 text-center">
+                        <p class="text-xl font-medium line-through text-gray-500">Standard Price (Wash + Dry): NPR 300</p>
+                        <p class="text-4xl font-extrabold mt-2 text-red-600 animate-flash-red">FESTIVAL DEAL ACTIVE!</p>
+                        <p class="text-6xl font-black text-lime-600 mt-2">NPR ${discountedPrice.toFixed(0)}</p>
+                        <p class="text-2xl font-medium text-gray-800 mt-2">20% OFF COLOR LOADS!</p>
+                        <small class="text-gray-600 block mt-3">*Discount applies to color-stained loads only, limited time.*</small>
+                    </div>
+                `;
+            } else {
+                 // Logic for conditional offers (Dashain, Monsoon, New Year)
+                discountHTML = `
+                    <div class="mb-10 text-center">
+                        <p class="text-xl font-medium text-gray-500">Standard Price (Wash + Dry): NPR 300</p>
+                        <p class="text-4xl font-extrabold mt-2 text-red-600 animate-flash-red">FESTIVAL DEAL ACTIVE!</p>
+                        <p class="text-2xl font-black text-lime-600 mt-2">${currentPromo.offer}</p>
+                        <small class="text-gray-600 block mt-3">*Offer details are conditional. See modal for final calculation and terms on ${currentPromo.title.toLowerCase().replace('!', '')}.</small>
+                    </div>
+                `;
+            }
+
+            // Inject the new discount HTML, replacing the static price structure
+            document.getElementById('price-wrapper').innerHTML = discountHTML;
+        }
+        
+        // --- IMAGEN API LOGIC (Promo Image) ---
+        const IMAGEN_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=`;
+        
+        const NEPALI_FESTIVALS = [
+            { 
+                name: "Dashain & Tihar", 
+                month_index: [8, 9, 10], // September, October, November (Approx)
+                title: "DASHAIN & TIHAR DRYING SALE!", // Corrected typo
+                offer: "Get 50% OFF the Drying Cycle on your 3rd visit during the festival week!",
+                prompt: "A vibrant, celebratory digital illustration for a modern laundry service sale in Nepal, featuring clean clothes, red tika, marigold flowers (sayapatri), and subtle Nepali Tihar lamps. The mood should be festive and clean."
+            },
+            {
+                name: "Holi (Fagu Purnima)", 
+                month_index: [2, 3], // March, April (Approx)
+                title: "HOLI COLOR REMOVAL DISCOUNT!",
+                offer: "Quick clean guarantee! Get 20% OFF ALL color-stained loads this week!",
+                prompt: "A colorful, modern digital illustration for a laundromat promotion showing vibrant Holi colors (abir) washing out of white clothes in a modern washing machine. Festive and clean style."
+            },
+            {
+                name: "New Year / Lhosar", 
+                month_index: [0, 1, 11], // January, February, December (Approx)
+                title: "NEW YEAR'S CLEAN START OFFER!",
+                offer: "Start the New Year fresh! 10% OFF all blanket and heavy winter wear cleaning.",
+                prompt: "A minimalist, clean digital illustration for a New Year's laundry promotion featuring snow, warm winter blankets, and a modern laundromat interior. Focus on freshness and light."
+            },
+             {
+                name: "Monsoon Season", 
+                month_index: [5, 6, 7], // June, July, August (Approx)
+                title: "MONSOON DRYING GUARANTEE!",
+                offer: "Beat the humidity! Free extra 15 minutes of drying time with every load!",
+                prompt: "A digital illustration for a laundromat promotion showing heavy monsoon rain outside a window, but warm, dry clothes inside a powerful dryer. Focus on comfort and reliability."
+            }
+        ];
+
+        // Fallback Image URL (High quality, relevant to laundry)
+        const FALLBACK_IMAGE_URL = 'https://images.unsplash.com/photo-1620958189688-6a3d6a4220b2?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; // Clean, modern laundry photo
+
+
+        // Refactored image generation to be non-async/non-backoff since backoff often causes timeouts in browser embeds
+        function generateAndSetPromoImage() {
+            const promoCard = document.getElementById('promo-card');
+            const promoContent = document.getElementById('promo-content');
+            const promoLoader = document.getElementById('promo-loader');
+            
+            // 1. Determine Current Promotion
+            const currentMonth = new Date().getMonth(); 
+            const currentPromo = NEPALI_FESTIVALS.find(promo => 
+                promo.month_index.includes(currentMonth)
+            ) || NEPALI_FESTIVALS[0]; 
+
+            // 2. Update Text Content
+            document.getElementById('promo-title').textContent = currentPromo.title;
+            document.getElementById('promo-offer').textContent = currentPromo.offer;
+
+            promoContent.style.display = 'none';
+            promoLoader.style.display = 'block';
+            promoCard.style.backgroundImage = `url('${FALLBACK_IMAGE_URL}')`; // Set fallback instantly
+
+            const payload = { 
+                instances: { prompt: currentPromo.prompt }, 
+                parameters: { "sampleCount": 1 } 
+            };
+            
+            fetch(IMAGEN_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(result => {
+                const base64Data = result.predictions?.[0]?.bytesBase64Encoded;
+
+                if (base64Data) {
+                    const imageUrl = `data:image/png;base64,${base64Data}`;
+                    
+                    // Set the GENERATED image as background
+                    promoCard.style.backgroundImage = `url('${imageUrl}')`;
+                    
+                } else {
+                    console.error("Imagen API: Returned no image data. Using fallback.");
+                }
+            })
+            .catch(error => {
+                console.error("Imagen API call failed. Using static fallback image.", error);
+            })
+            .finally(() => {
+                // Show content regardless of success/failure
+                promoContent.style.display = 'block';
+                promoLoader.style.display = 'none';
+            });
+        }
+        
+        // --- EXISTING JAVASCRIPT LOGIC (Load Functions) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check open/closed status
+            const now = new Date();
+            const currentHour = now.getHours(); 
+            const openHour = 7;   
+            const closeHour = 21; 
+            const statusElement = document.getElementById('open-status');
+
+            if (currentHour >= openHour && currentHour < closeHour) {
+                statusElement.textContent = "OPEN NOW! Come on over! 😄";
+                statusElement.classList.remove('text-hot-red');
+                statusElement.classList.add('text-neon-green');
+            } else {
+                statusElement.textContent = "CLOSED. See you at 7:00 AM. 😴";
+                statusElement.classList.remove('text-neon-green');
+                statusElement.classList.add('text-hot-red');
+            }
+
+            // Immediately start image generation and set fallback
+            generateAndSetPromoImage();
+        });
+    </script>
+</head>
+<body class="bg-gray-50 font-sans antialiased washing-background">
+
+    <header class="hero-background text-gray-800 py-24 shadow-inner relative overflow-hidden border-b-8 border-lime-500">
+        <div class="relative z-10 container mx-auto px-6 text-center">
+            
+           
+            <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight mb-4 text-gray-900 animate-fade-up" style="animation-delay: 0.1s;">COMFORT CLEAN LAUNDROMAT</h1>
+            <p class="text-xl sm:text-3xl mt-2 font-medium text-gray-600 animate-fade-up" style="animation-delay: 0.3s;">Premium Wash & Dry: <span class="font-black text-lime-600">Done in 60 Minutes!</span> <i class="fas fa-stopwatch"></i></p>
+            <a href="#" onclick="scrollToLocation(event)" class="cta-flash animate-call-pulse inline-block bg-lime-500 hover:bg-lime-600 text-gray-900 font-extrabold py-4 px-12 rounded-none shadow-lg transition duration-300 ease-in-out mt-10 text-xl animate-fade-up" style="animation-delay: 0.5s;">
+                <i class="fas fa-map-marker-alt mr-2"></i> CHECK PRICING NOW!
+            </a>
+        </div>
+    </header>
+
+    <section id="ad-banner" class="bg-gray-900 text-white py-3 overflow-hidden border-b-4 border-lime-500 shadow-xl">
+        <div class="ad-ticker-scroll uppercase font-extrabold text-lg tracking-wider">
+            <span class="ad-segment text-lime-400">🚨 GRAND LAUNCH OFFER!</span>
+            <span class="ad-segment text-red-500 animate-flash-red">GET YOUR FIRST LOAD FREE!</span>
+            <span class="ad-segment text-lime-400">🔥 SPEED. COMFORT. HYGIENE.</span>
+            <span class="ad-segment text-lime-400">✅ JALPACHOWK ONLY! LIMITED TIME!</span>
+            <span class="ad-segment text-yellow-300">WASH & DRY IN 60 MINUTES!</span>
+            
+            <span class="ad-segment text-lime-400">🚨 GRAND LAUNCH OFFER!</span>
+            <span class="ad-segment text-red-500 animate-flash-red">GET YOUR FIRST LOAD FREE!</span>
+            <span class="ad-segment text-lime-400">🔥 SPEED. COMFORT. HYGIENE.</span>
+            <span class="ad-segment text-lime-400">✅ JALPACHOWK ONLY! LIMITED TIME!</span>
+            <span class="ad-segment text-yellow-300">WASH & DRY IN 60 MINUTES!</span>
+        </div>
+    </section>
+    <section id="how-it-works" class="py-20 bg-white animate-fade-up">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-6">How It Works: 4 Simple Steps</h2>
+            <p class="text-xl text-gray-500 max-w-3xl mx-auto mb-16">
+                Self-service is fast, easy, and hassle-free. Get clean clothes in less than one hour!
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <div class="step-container group animate-fade-up" style="animation-delay: 0.2s;">
+                    <div class="step-icon transition duration-300">
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">1. LOAD & PAY</h3>
+                    <p class="text-gray-600">Load your machine, choose your cycle, and pay instantly via QR (Fonepay/Esewa).</p>
+                </div>
+                
+                <div class="step-container group animate-fade-up" style="animation-delay: 0.4s;">
+                    <div class="step-icon transition duration-300">
+                        <i class="fas fa-spinner animate-spin"></i> 
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">2. WASH & WAIT</h3>
+                    <p class="text-gray-600">Relax in our Comfort Zone. The high-speed wash cycle takes approximately 30 minutes.</p>
+                </div>
+                
+                <div class="step-container group animate-fade-up" style="animation-delay: 0.6s;">
+                    <div class="step-icon transition duration-300">
+                        <i class="fas fa-wind"></i> 
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">3. DRY & FOLD</h3>
+                    <p class="text-gray-600">Transfer clothes to a dryer. The drying process is fast and efficient (approx. 30 minutes).</p>
+                </div>
+
+                <div class="step-container group animate-fade-up" style="animation-delay: 0.8s;">
+                    <div class="step-icon transition duration-300">
+                        <i class="fas fa-hands-clapping"></i> 
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">4. DONE!</h3>
+                    <p class="text-gray-600">Your clothes are clean, fresh, and dry. Back home in less than an hour!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="promotions" class="py-20 bg-gray-100 border-t border-b border-gray-300 animate-fade-up" style="animation-delay: 1.1s;">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-extrabold text-gray-800 text-center mb-12">🔥 Seasonal & Hot Promotions 🔥</h2>
+            
+            <div class="flex flex-col lg:flex-row gap-8 items-stretch">
+                
+                <div id="promo-card" class="lg:w-full promo-card-main text-white rounded-none shadow-2xl overflow-hidden p-10 transform hover:scale-[1.01] transition duration-300">
+                    
+                    <div id="promo-loader" class="promo-loader text-center">
+                        <div class="spinner border-t-white border-lime-500 w-16 h-16" style="display: block; margin: 0 auto 10px auto;"></div>
+                        <p class="font-bold text-xl">Generating Festival Visual...</p>
+                        <p class="text-sm">Please wait a few moments.</p>
+                    </div>
+
+                    <div id="promo-content" class="promo-content text-center" style="display: none;">
+                        <p class="text-xl uppercase font-semibold text-lime-400 mb-2">LIMITED TIME OFFER</p>
+                        <h3 id="promo-title" class="text-5xl md:text-6xl font-black mb-4 leading-tight tracking-wider text-yellow-300 animate-pulse">
+                            </h3>
+                        <p id="promo-offer" class="text-2xl mb-8">
+                            </p>
+                        <a href="#" onclick="showOfferModal(event)" class="inline-block bg-lime-500 text-gray-900 font-extrabold py-3 px-8 rounded-none shadow-lg transition duration-300 hover:bg-lime-600">
+                            View Offer Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="amenities-grid" class="py-20 bg-gray-100 border-t border-b border-gray-300 animate-fade-up" style="animation-delay: 1.5s;">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-extrabold text-gray-800 mb-16">What Makes Us Different?</h2>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                
+                <div class="amenity-card group">
+                    <i class="fas fa-temperature-high"></i>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">HOT WASH OPTION</h3>
+                    <p class="text-gray-500 text-sm">Deep clean and sanitize using powerful hot water cycles.</p>
+                </div>
+                
+                <div class="amenity-card group">
+                    <i class="fas fa-wifi"></i>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">FREE HIGH-SPEED WI-FI</h3>
+                    <p class="text-gray-500 text-sm">Stream, work, or study with our blazing fast connection.</p>
+                </div>
+
+                <div class="amenity-card group">
+                    <i class="fas fa-charging-station"></i>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">CHARGING PORTS</h3>
+                    <p class="text-gray-500 text-sm">Dedicated ports for your phone, tablet, or laptop.</p>
+                </div>
+
+                <div class="amenity-card group">
+                    <i class="fas fa-qrcode"></i>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">EASY DIGITAL PAY</h3>
+                    <p class="text-gray-500 text-sm">Seamless QR Pay (Fonepay/Esewa) or Token system.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" class="py-20 bg-white animate-fade-up" style="animation-delay: 1.9s;">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-extrabold text-gray-800 text-center mb-16">📍 Find Us & Our Pricing</h2>
+            <div class="flex flex-col lg:flex-row gap-12 items-stretch">
+                
+                <div id="pricing-block" class="lg:w-1/2 p-10 bg-gradient-clean text-gray-900 rounded-none shadow-2xl border-2 border-lime-600 flex flex-col justify-between transition duration-500 hover:shadow-lime-300/50">
+                    <div>
+                        <h3 class="text-3xl font-extrabold mb-5 border-b-2 pb-3 border-lime-600">Pricing & Operating Hours</h3>
+                        
+                        <div id="price-wrapper" class="mb-10 text-center">
+                            <p class="text-xl font-medium" id="standard-price-text">Standard Price (Wash + Dry per Load):</p>
+                            <p class="text-6xl font-black mt-2 text-red-600 animate-blink-text" id="standard-price-value">NPR 300</p>
+                            <small class="text-gray-600 block mt-3" id="standard-price-note">*Premium service for unmatched speed, reliability, and comfort.*</small>
+                        </div>
+
+                        <div>
+                            <p class="text-xl font-medium">Hours of Operation:</p>
+                            <p class="text-3xl font-bold mt-2">7:00 AM – 9:00 PM Daily</p>
+                            <p class="text-2xl mt-5 font-semibold bg-gray-100 rounded-none p-2 inline-block shadow-inner">
+                                Status: <span id="open-status" class="text-hot-red">Loading...</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 p-10 bg-gray-50 rounded-none shadow-xl flex flex-col justify-between border-2 border-gray-300 transition duration-500 hover:shadow-gray-400/50">
+                    <div>
+                        <h3 class="text-3xl font-extrabold text-gray-800 mb-5 border-b-2 pb-3 border-gray-400">Our Convenient Location</h3>
+                        <p class="text-lg text-gray-700 mb-5">We're right where you need us, at the bustling Jalpachowk intersection:</p>
+                        <address class="font-medium text-gray-800 not-italic text-lg">
+                            <i class="fas fa-map-marker-alt text-red-600 mr-3"></i><strong>Jalpachowk, Baniyatar Road, Tokha Municipality</strong><br>
+                            <span class="ml-8 text-gray-600 text-base">Landmark: Near Jalpa Oil Mill & Baniyatar Micro Station</span>
+                        </address>
+                        <div id="map-placeholder">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14120.306019777991!2d85.31494555!3d27.75545225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1f29633e2183%3A0x89e8751532f17105!2sJalpachowk!5e0!3m2!1sen!2snp!4v1701543886586!5m2!1sen!2snp" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
+                                title="Google Map of Comfort Clean Laundromat at Jalpachowk">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-gray-800 text-white py-16 text-center animate-fade-up" style="animation-delay: 2.1s;">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-extrabold mb-4">Ready to Reclaim Your Time?</h2>
+            <p class="text-xl mb-8 text-gray-300">Stop wasting time on laundry. Visit Comfort Clean today!</p>
+            <a href="tel:9857068995" class="inline-block bg-lime-500 text-gray-900 hover:bg-lime-600 font-extrabold py-4 px-12 rounded-none shadow-lg text-xl transition duration-300 transform hover:scale-105">
+                <i class="fas fa-phone-alt mr-3"></i>Call Us: 9857068995
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-400 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-sm">© 2025 Comfort Clean Laundromat. All rights reserved.</p>
+            <p class="text-xs mt-1 text-gray-600">Sole Proprietorship - Kathmandu, Nepal</p>
+        </div>
+    </footer>
+
+
+    <div id="offer-modal" class="hidden fixed inset-0 z-50 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 transition-opacity duration-300" onclick="closeModal()">
+        <div class="bg-white rounded-lg shadow-2xl p-8 max-w-lg w-full transform scale-100 transition-transform duration-300" onclick="event.stopPropagation()">
+            
+            <div class="flex justify-between items-center border-b pb-4 mb-4">
+                <h3 id="modal-title" class="text-3xl font-extrabold text-lime-600">
+                    [Promotion Title]
+                </h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-700 text-3xl font-bold transition">
+                    ×
+                </button>
+            </div>
+
+            <div id="modal-body" class="text-gray-800">
+                </div>
+
+            <button onclick="closeModal()" class="mt-6 w-full bg-gray-800 text-white font-extrabold py-3 rounded-none transition duration-300 hover:bg-gray-700">
+                CLOSE & RETURN
+            </button>
+        </div>
+    </div>
+    </body>
+</html>
